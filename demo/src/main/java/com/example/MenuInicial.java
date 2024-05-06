@@ -1,6 +1,8 @@
 package com.example;
 
-import java.util.Scanner; 
+import java.util.Scanner;
+
+import com.example.agentes.CadastrarAgente; 
 
 public class MenuInicial {
     public static void main(String[] args) {
@@ -19,7 +21,7 @@ public class MenuInicial {
 
         switch (opcao) {
             case 1:
-                cadastrarAgente();
+                CadastrarAgente.cadastrar(scanner);
                 break;
             case 2:
                 criarAventura();
@@ -36,11 +38,6 @@ public class MenuInicial {
     } while (opcao != 4);
 
     scanner.close();
-}
-
-private static void cadastrarAgente() {
-    // Lógica para cadastrar um agente
-    System.out.println("Opção escolhida: Cadastrar Agente");
 }
 
 private static void criarAventura() {
