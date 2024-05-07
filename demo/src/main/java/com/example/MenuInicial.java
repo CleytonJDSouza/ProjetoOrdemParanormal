@@ -2,7 +2,8 @@ package com.example;
 
 import java.util.Scanner;
 
-import com.example.agentes.CadastrarAgente; 
+import com.example.agentes.cadastrarAgente;
+import com.example.criaturas.cadastrarCriatura;
 
 public class MenuInicial {
     public static void main(String[] args) {
@@ -21,16 +22,16 @@ public class MenuInicial {
 
         switch (opcao) {
             case 1:
-                CadastrarAgente.cadastrar(scanner);
+                cadastrarAgente.cadastrar(scanner);
                 break;
             case 2:
                 criarAventura();
                 break;
             case 3:
-                cadastrarCriatura();
+                cadastrarCriatura.cadastrar(scanner);
                 break;
             case 4:
-                System.out.println("Saindo...");
+                System.out.println("Olhos Sempre Abertos...");
                 break;
             default:
                 System.out.println("Opção inválida. Por favor, escolha novamente.");
@@ -43,10 +44,5 @@ public class MenuInicial {
 private static void criarAventura() {
     // Lógica para criar uma aventura
     System.out.println("Opção escolhida: Criar Aventura");
-}
-
-private static void cadastrarCriatura() {
-    // Lógica para cadastrar uma criatura
-    System.out.println("Opção escolhida: Cadastrar Criatura");
 }
 }

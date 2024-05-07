@@ -1,7 +1,7 @@
 package com.example.agentes;
 import java.util.Scanner;
 
-public class CadastrarAgente {
+public class cadastrarAgente {
     public static void cadastrar(Scanner scanner) {
         String nomeJogador;
         String nomePersonagem;
