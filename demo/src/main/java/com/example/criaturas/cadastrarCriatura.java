@@ -27,7 +27,7 @@ public class cadastrarCriatura {
         valorDificuldade = scanner.nextInt();
         scanner.nextLine(); 
 
-        // Exibir informações para confirmação
+        
         System.out.println("\nConfirme as informações:");
         System.out.println("Nome da criatura: " + nomeCriatura);
         System.out.println("Elementos da criatura:");
@@ -37,7 +37,7 @@ public class cadastrarCriatura {
         System.out.println("Valor de dificuldade: " + valorDificuldade);
 
         // Solicitar confirmação
-        System.out.println("\nAs informações estão corretas? (Digite 's' para sim, 'n' para não)");
+        System.out.println("\nAs informações estão corretas? (S/N)");
         String confirmacao = scanner.nextLine();
         if (confirmacao.equalsIgnoreCase("n")) {
             System.out.println("Por favor, refaça o cadastro da criatura.");
@@ -46,7 +46,6 @@ public class cadastrarCriatura {
 
         System.out.println("Criatura cadastrada com sucesso!");
         
-        // Aqui você pode adicionar lógica adicional, como armazenar a criatura em algum lugar.
     }
 
     private static void coletarElementos(Scanner scanner, List<String> elementosCriatura) {
