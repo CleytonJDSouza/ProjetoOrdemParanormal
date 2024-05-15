@@ -5,8 +5,8 @@ public class cadastrarAgente {
     public static void cadastrar(Scanner scanner) {
         String nomeJogador;
         String nomePersonagem;
-        String classePersonagem;
-        int exposicaoParanormal;
+        String classePersonagem = "";
+        int exposicaoParanormal = 0;
         String confirmacao = "N";
 
         do {
@@ -57,6 +57,9 @@ public class cadastrarAgente {
             }
 
         } while (!confirmacao.equalsIgnoreCase("S"));
+
+        Agente novoAgente = new Agente(nomeJogador, nomePersonagem, classePersonagem, exposicaoParanormal);
+        listarAgentes.adicionarAgente(novoAgente);
 
         System.out.println("Agente cadastrado com sucesso!");
     }
