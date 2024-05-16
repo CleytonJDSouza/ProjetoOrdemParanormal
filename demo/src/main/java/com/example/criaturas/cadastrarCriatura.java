@@ -5,47 +5,26 @@ import java.util.List;
 import java.util.Scanner;
 
 public class cadastrarCriatura {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        while (true) {
-            cadastrar(scanner);
-        }
-    }
-    
-    public static void cadastrar(Scanner scanner) {
+    private static List<Criatura> criaturas = new ArrayList<>();
+
+    public static void cadastrar(Scanner scanner, List<Criatura> criaturas) {
         String nomeCriatura;
         List<String> elementosCriatura = new ArrayList<>();
         int valorDificuldade;
 
-        System.out.println("Digite o nome da criatura:");
+        System.out.println("Digite o nome da criatura");
         nomeCriatura = scanner.next();
 
         coletarElementos(scanner, elementosCriatura);
 
         System.out.println("Digite o valor de dificuldade (VD) da criatura (0 a 400):");
         valorDificuldade = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine();
 
-        
-        System.out.println("\nConfirme as informações:");
-        System.out.println("Nome da criatura: " + nomeCriatura);
-        System.out.println("Elementos da criatura:");
-        for (String elemento : elementosCriatura) {
-            System.out.println("- " + elemento);
-        }
-        System.out.println("Valor de dificuldade: " + valorDificuldade);
-
-        // Solicitar confirmação
-        System.out.println("\nAs informações estão corretas? (S/N)");
-        String confirmacao = scanner.nextLine();
-        if (confirmacao.equalsIgnoreCase("n")) {
-            System.out.println("Por favor, refaça o cadastro da criatura.");
-            return;
-        }
+        Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade);
+        adicionarCriatura(novaCriatura);
 
         System.out.println("Criatura cadastrada com sucesso!");
-        
     }
 
     private static void coletarElementos(Scanner scanner, List<String> elementosCriatura) {
@@ -90,5 +69,9 @@ public class cadastrarCriatura {
                     System.out.println("Opção inválida. Por favor, escolha novamente.");
             }
         } while (true);
+    }
+
+    private static void adicionarCriatura(Criatura criatura) {
+        criaturas.add(criatura);
     }
 }

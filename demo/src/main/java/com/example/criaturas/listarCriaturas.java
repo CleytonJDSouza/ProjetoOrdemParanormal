@@ -10,7 +10,7 @@ public class listarCriaturas {
         criaturas.add(criatura);
     }
 
-    public static void listarCriaturas() {
+    public static void listarCriaturas(List<Criatura> criaturas) {
         System.out.println("Lista de Criaturas Cadastradas:");
         System.out.println("Nome da Criatura | Elementos | VD");
         for (Criatura criatura : criaturas) {
