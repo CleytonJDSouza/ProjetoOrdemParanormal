@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class cadastrarCriatura {
-    private static List<Criatura> criaturas = new ArrayList<>();
 
     public static void cadastrar(Scanner scanner, List<Criatura> criaturas) {
         String nomeCriatura;
@@ -22,7 +21,7 @@ public class cadastrarCriatura {
         scanner.nextLine();
 
         Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade);
-        adicionarCriatura(novaCriatura);
+        criaturas.add(novaCriatura);
 
         System.out.println("Criatura cadastrada com sucesso!");
     }
@@ -69,9 +68,5 @@ public class cadastrarCriatura {
                     System.out.println("Opção inválida. Por favor, escolha novamente.");
             }
         } while (true);
-    }
-
-    private static void adicionarCriatura(Criatura criatura) {
-        criaturas.add(criatura);
     }
 }
