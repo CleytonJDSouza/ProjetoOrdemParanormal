@@ -23,4 +23,8 @@ public class listarAgentes {
                     agente.getExposicaoParanormal() + "% | " + agente.getNomeJogador());
         }
     }
+
+    public static List<Agente> getAgentes() {
+        return agentes;
+    }
 }
