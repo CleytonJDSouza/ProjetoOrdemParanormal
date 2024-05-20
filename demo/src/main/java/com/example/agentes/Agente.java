@@ -1,5 +1,7 @@
 package com.example.agentes;
 
+import java.util.Objects;
+
 public class Agente {
     private String nomeJogador;
     private String nomePersonagem;
@@ -27,6 +29,19 @@ public class Agente {
 
     public String getNomePersonagem() {
         return nomePersonagem;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Agente agente = (Agente) o;
+        return Objects.equals(nomePersonagem, agente.nomePersonagem);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nomePersonagem);
     }
 }
 

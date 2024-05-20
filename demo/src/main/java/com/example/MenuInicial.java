@@ -1,20 +1,22 @@
 package com.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import com.example.agentes.Agente;
 import com.example.agentes.cadastrarAgente;
 import com.example.agentes.listarAgentes;
+import com.example.aventura.Aventura;
 import com.example.criaturas.Criatura;
 import com.example.criaturas.cadastrarCriatura;
 import com.example.criaturas.listarCriaturas;
 import com.example.grupo.Grupo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class MenuInicial {
     private static List<Criatura> criaturas = new ArrayList<>();
     private static List<Grupo> grupos = new ArrayList<>();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int opcao;
@@ -28,7 +30,7 @@ public class MenuInicial {
             System.out.println("3 - Cadastrar Criatura");
             System.out.println("4 - Listar Criaturas");
             System.out.println("5 - Criar Grupo");
-            System.out.println("6 - Listar Grupos");
+            System.out.println("6 - Iniciar Aventura");
             System.out.println("7 - Fechar");
 
             opcao = scanner.nextInt();
@@ -50,7 +52,7 @@ public class MenuInicial {
                     criarGrupo(scanner);
                     break;
                 case 6:
-                    listarGrupos();
+                    iniciarAventura(scanner);
                     break;
                 case 7:
                     System.out.println("Olhos Sempre Abertos...");
@@ -84,15 +86,19 @@ public class MenuInicial {
             }
 
             if (agenteSelecionado != null) {
-                System.out.println("Deseja adicionar " + agenteSelecionado.getNomePersonagem() + " | " +
-                        agenteSelecionado.getClassePersonagem() + " | " + agenteSelecionado.getExposicaoParanormal() +
-                        "% | " + agenteSelecionado.getNomeJogador() + " ao grupo? (S/N)");
-                String confirmacao = scanner.nextLine();
-                if (confirmacao.equalsIgnoreCase("S")) {
-                    grupo.adicionarAgente(agenteSelecionado);
-                    System.out.println("Agente adicionado ao grupo.");
+                if (grupo.getAgentes().contains(agenteSelecionado)) {
+                    System.out.println("Agente já está no grupo.");
                 } else {
-                    System.out.println("Agente não adicionado.");
+                    System.out.println("Deseja adicionar " + agenteSelecionado.getNomePersonagem() + " | " +
+                            agenteSelecionado.getClassePersonagem() + " | " + agenteSelecionado.getExposicaoParanormal() +
+                            "% | " + agenteSelecionado.getNomeJogador() + " ao grupo? (S/N)");
+                    String confirmacao = scanner.nextLine();
+                    if (confirmacao.equalsIgnoreCase("S")) {
+                        grupo.adicionarAgente(agenteSelecionado);
+                        System.out.println("Agente adicionado ao grupo.");
+                    } else {
+                        System.out.println("Agente não adicionado.");
+                    }
                 }
             } else {
                 System.out.println("Agente não encontrado.");
@@ -102,21 +108,34 @@ public class MenuInicial {
             String resposta = scanner.nextLine();
             adicionarMais = resposta.equalsIgnoreCase("S");
 
-            } while (adicionarMais);
+        } while (adicionarMais);
 
-            grupos.add(grupo);
-            System.out.println("Grupo " + nomeGrupo + " criado com sucesso.");
+        grupos.add(grupo);
+        System.out.println("Grupo " + nomeGrupo + " criado com sucesso.");
     }
-        private static void listarGrupos() {
-            if (grupos.isEmpty()) {
-                System.out.println("Nenhum grupo cadastrado.");
-                return;
-            }
 
-            for (Grupo grupo : grupos) {
-                grupo.listarAgentes();
-            }
+    private static void iniciarAventura(Scanner scanner) {
+        if (grupos.isEmpty()) {
+            System.out.println("Nenhum grupo criado. Crie um grupo primeiro.");
+            return;
+        }
+
+        System.out.println("Selecione o grupo para iniciar a aventura:");
+        for (int i = 0; i < grupos.size(); i++) {
+            System.out.println((i + 1) + " - " + grupos.get(i).getNomeGrupo());
+        }
+
+        int escolhaGrupo = scanner.nextInt();
+        scanner.nextLine();
+
+        if (escolhaGrupo < 1 || escolhaGrupo > grupos.size()) {
+            System.out.println("Escolha inválida.");
+            return;
+        }
+
+        Grupo grupoSelecionado = grupos.get(escolhaGrupo - 1);
+        Aventura.iniciarAventura(grupoSelecionado, criaturas);
     }
 }
-    
+
 
