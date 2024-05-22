@@ -1,8 +1,6 @@
 package com.example.aventura;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.example.agentes.Agente;
@@ -10,26 +8,24 @@ import com.example.criaturas.Criatura;
 import com.example.grupo.Grupo;
 
 public class Aventura {
-    
+
     public static void iniciarAventura(Grupo grupo, List<Criatura> criaturas) {
         int totalNex = calcularTotalNex(grupo);
-        List<Criatura> criaturasSelecionadas = encontrarCriaturasMaisProximas(totalNex, criaturas);
+        
+        List<Criatura> criaturasDisponiveis = new ArrayList<>(criaturas);
 
-        System.out.println("Grupo:");
-        for (Agente agente : grupo.getAgentes()) {
-            System.out.println(agente.getNomePersonagem() + " | " + agente.getClassePersonagem() + " | " + agente.getExposicaoParanormal() + 
-                    "% | " + agente.getNomeJogador());
-        }
-        System.out.println("Total de NEX do grupo: " + totalNex + "%");
+        List<Criatura> batalhaFacil = encontrarMelhoresCriaturas(totalNex / 2, criaturasDisponiveis);
+        criaturasDisponiveis.removeAll(batalhaFacil);
 
-        System.out.println("Criaturas selecionadas:");
-        for (Criatura criatura : criaturasSelecionadas) {
-            System.out.println(criatura.getNomeCriatura() + " | ");
-            for (String elemento : criatura.getElementosCriatura()) {
-                System.out.print(elemento + ", ");
-            }
-            System.out.println(" | " + criatura.getValorDificuldade());
-        }
+        List<Criatura> batalhaMedia = encontrarMelhoresCriaturas(totalNex, criaturasDisponiveis);
+        criaturasDisponiveis.removeAll(batalhaMedia);
+
+        List<Criatura> batalhaDificil = encontrarCriaturaMaisProxima(3 * totalNex / 2, criaturasDisponiveis);
+
+        imprimirGrupo(grupo, totalNex);
+        imprimirCriaturas("Batalha Fácil", batalhaFacil);
+        imprimirCriaturas("Batalha Média", batalhaMedia);
+        imprimirCriaturaUnica("Batalha Difícil", batalhaDificil);
     }
 
     private static int calcularTotalNex(Grupo grupo) {
@@ -40,22 +36,83 @@ public class Aventura {
         return totalNex;
     }
 
-    private static List<Criatura> encontrarCriaturasMaisProximas(int totalNex, List<Criatura> criaturas) {
-        Collections.sort(criaturas, Comparator.comparingInt(Criatura::getValorDificuldade));
+    private static List<Criatura> encontrarMelhoresCriaturas(int valorAlvo, List<Criatura> criaturas) {
+        int n = criaturas.size();
+        int[] dp = new int[valorAlvo + 1];
+        List<Criatura>[] dpList = new List[valorAlvo + 1];
 
-        List<Criatura> resultado = new ArrayList<>();
-        int somaAtual = 0;
+        for (int i = 0; i <= valorAlvo; i++) {
+            dpList[i] = new ArrayList<>();
+        }
 
         for (Criatura criatura : criaturas) {
-            if (somaAtual + criatura.getValorDificuldade() <= totalNex) {
-                resultado.add(criatura);
-                somaAtual += criatura.getValorDificuldade();
-            }
-            if (somaAtual == totalNex) {
-                break;
+            int vd = criatura.getValorDificuldade();
+            if (vd > valorAlvo) continue;
+            for (int j = valorAlvo; j >= vd; j--) {
+                if (dp[j - vd] + vd > dp[j]) {
+                    dp[j] = dp[j - vd] + vd;
+                    dpList[j] = new ArrayList<>(dpList[j - vd]);
+                    dpList[j].add(criatura);
+                }
             }
         }
 
+        return dpList[valorAlvo];
+    }
+
+    private static List<Criatura> encontrarCriaturaMaisProxima(int valorAlvo, List<Criatura> criaturas) {
+        Criatura melhorCriatura = null;
+        int melhorDiferenca = Integer.MAX_VALUE;
+
+        for (Criatura criatura : criaturas) {
+            int vd = criatura.getValorDificuldade();
+            int diferenca = Math.abs(valorAlvo - vd);
+            if (diferenca < melhorDiferenca) {
+                melhorDiferenca = diferenca;
+                melhorCriatura = criatura;
+            }
+        }
+
+        List<Criatura> resultado = new ArrayList<>();
+        if (melhorCriatura != null) {
+            resultado.add(melhorCriatura);
+        }
         return resultado;
+    }
+
+    private static void imprimirGrupo(Grupo grupo, int totalNex) {
+        System.out.println("Grupo:");
+        for (Agente agente : grupo.getAgentes()) {
+            System.out.println(agente.getNomePersonagem() + " | " + agente.getClassePersonagem() + " | " + agente.getExposicaoParanormal() + 
+                    "% | " + agente.getNomeJogador());
+        }
+        System.out.println("Total de NEX do grupo: " + totalNex + "%");
+    }
+
+    private static void imprimirCriaturas(String titulo, List<Criatura> criaturas) {
+        System.out.println(titulo + ":");
+        for (Criatura criatura : criaturas) {
+            System.out.print(criatura.getNomeCriatura() + " | ");
+            for (String elemento : criatura.getElementosCriatura()) {
+                System.out.print(elemento + ", ");
+            }
+            System.out.println(" | " + criatura.getValorDificuldade());
+        }
+        System.out.println();
+    }
+
+    private static void imprimirCriaturaUnica(String titulo, List<Criatura> criatura) {
+        System.out.println(titulo + ":");
+        if (!criatura.isEmpty()) {
+            Criatura c = criatura.get(0);
+            System.out.print(c.getNomeCriatura() + " | ");
+            for (String elemento : c.getElementosCriatura()) {
+                System.out.print(elemento + ", ");
+            }
+            System.out.println(" | " + c.getValorDificuldade());
+        } else {
+            System.out.println("Nenhuma criatura encontrada.");
+        }
+        System.out.println();
     }
 }
