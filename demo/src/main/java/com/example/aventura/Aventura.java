@@ -9,10 +9,12 @@ import com.example.grupo.Grupo;
 
 public class Aventura {
 
-    public static void iniciarAventura(Grupo grupo, List<Criatura> criaturas) {
+    public static void iniciarAventura(Grupo grupo, List<Criatura> criaturas, String elemento) {
         int totalNex = calcularTotalNex(grupo);
+
+        List<Criatura> criaturasFiltradas = filtrarCriaturasPorElemento(criaturas, elemento);
         
-        List<Criatura> criaturasDisponiveis = new ArrayList<>(criaturas);
+        List<Criatura> criaturasDisponiveis = new ArrayList<>(criaturasFiltradas);
 
         List<Criatura> batalhaFacil = encontrarMelhoresCriaturas(totalNex / 2, criaturasDisponiveis);
         criaturasDisponiveis.removeAll(batalhaFacil);
@@ -23,9 +25,9 @@ public class Aventura {
         List<Criatura> batalhaDificil = encontrarCriaturaMaisProxima(3 * totalNex / 2, criaturasDisponiveis);
 
         imprimirGrupo(grupo, totalNex);
-        imprimirCriaturas("Batalha Fácil", batalhaFacil);
-        imprimirCriaturas("Batalha Média", batalhaMedia);
-        imprimirCriaturaUnica("Batalha Difícil", batalhaDificil);
+        imprimirCriaturas("Batalha no Inicio de Aventura", batalhaFacil);
+        imprimirCriaturas("Batalha no Meio da Aventura", batalhaMedia);
+        imprimirCriaturaUnica("Batalha Contra o Boss Final", batalhaDificil);
     }
 
     private static int calcularTotalNex(Grupo grupo) {
@@ -34,6 +36,16 @@ public class Aventura {
             totalNex += agente.getExposicaoParanormal();
         }
         return totalNex;
+    }
+
+    private static List<Criatura> filtrarCriaturasPorElemento(List<Criatura> criaturas, String elemento) {
+        List <Criatura> criaturaFiltradas = new ArrayList<>();
+        for (Criatura criatura : criaturas) {
+            if (criatura.getElementosCriatura().contains(elemento)) {
+                criaturaFiltradas.add(criatura);
+            }
+        }
+        return criaturaFiltradas;
     }
 
     private static List<Criatura> encontrarMelhoresCriaturas(int valorAlvo, List<Criatura> criaturas) {

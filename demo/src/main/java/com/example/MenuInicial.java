@@ -89,16 +89,8 @@ public class MenuInicial {
                 if (grupo.getAgentes().contains(agenteSelecionado)) {
                     System.out.println("Agente já está no grupo.");
                 } else {
-                    System.out.println("Deseja adicionar " + agenteSelecionado.getNomePersonagem() + " | " +
-                            agenteSelecionado.getClassePersonagem() + " | " + agenteSelecionado.getExposicaoParanormal() +
-                            "% | " + agenteSelecionado.getNomeJogador() + " ao grupo? (S/N)");
-                    String confirmacao = scanner.nextLine();
-                    if (confirmacao.equalsIgnoreCase("S")) {
-                        grupo.adicionarAgente(agenteSelecionado);
-                        System.out.println("Agente adicionado ao grupo.");
-                    } else {
-                        System.out.println("Agente não adicionado.");
-                    }
+                    grupo.adicionarAgente(agenteSelecionado);
+                    System.out.println("Agente adicionado ao grupo.");
                 }
             } else {
                 System.out.println("Agente não encontrado.");
@@ -107,16 +99,20 @@ public class MenuInicial {
             System.out.println("Deseja adicionar mais um agente ao grupo? (S/N)");
             String resposta = scanner.nextLine();
             adicionarMais = resposta.equalsIgnoreCase("S");
-
         } while (adicionarMais);
 
         grupos.add(grupo);
-        System.out.println("Grupo " + nomeGrupo + " criado com sucesso.");
+        System.out.println("Grupo criado com sucesso.");
     }
 
     private static void iniciarAventura(Scanner scanner) {
         if (grupos.isEmpty()) {
-            System.out.println("Nenhum grupo criado. Crie um grupo primeiro.");
+            System.out.println("Nenhum grupo disponível. Por favor, crie um grupo primeiro.");
+            return;
+        }
+
+        if (criaturas.isEmpty()) {
+            System.out.println("Nenhuma criatura disponível. Por favor, cadastre criaturas primeiro.");
             return;
         }
 
@@ -125,17 +121,18 @@ public class MenuInicial {
             System.out.println((i + 1) + " - " + grupos.get(i).getNomeGrupo());
         }
 
-        int escolhaGrupo = scanner.nextInt();
-        scanner.nextLine();
-
-        if (escolhaGrupo < 1 || escolhaGrupo > grupos.size()) {
-            System.out.println("Escolha inválida.");
+        int indiceGrupo = scanner.nextInt() - 1;
+        if (indiceGrupo < 0 || indiceGrupo >= grupos.size()) {
+            System.out.println("Grupo inválido.");
             return;
         }
 
-        Grupo grupoSelecionado = grupos.get(escolhaGrupo - 1);
-        Aventura.iniciarAventura(grupoSelecionado, criaturas);
+        Grupo grupoSelecionado = grupos.get(indiceGrupo);
+
+        System.out.println("Escolha o elemento da criatura para a aventura:");
+        scanner.nextLine();
+        String elementoSelecionado = scanner.nextLine();
+
+        Aventura.iniciarAventura(grupoSelecionado, criaturas, elementoSelecionado);
     }
 }
-
-
