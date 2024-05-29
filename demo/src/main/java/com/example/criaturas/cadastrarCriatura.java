@@ -10,6 +10,7 @@ public class cadastrarCriatura {
         String nomeCriatura;
         List<String> elementosCriatura = new ArrayList<>();
         int valorDificuldade;
+        int dtSanidade;
 
         System.out.println("Digite o nome da criatura");
         nomeCriatura = scanner.next();
@@ -20,7 +21,14 @@ public class cadastrarCriatura {
         valorDificuldade = scanner.nextInt();
         scanner.nextLine();
 
-        Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade);
+        System.out.println("Digite o valor de DT de Sanidade da criatura (0 a 45):");
+        dtSanidade = scanner.nextInt();
+        scanner.nextLine();
+
+        /*Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade, dtSanidade);
+        criaturas.add(novaCriatura);*/
+
+        Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade, dtSanidade);
         criaturas.add(novaCriatura);
 
         System.out.println("Criatura cadastrada com sucesso!");

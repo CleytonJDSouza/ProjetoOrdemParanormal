@@ -12,13 +12,14 @@ public class listarCriaturas {
 
     public static void listarCriaturas(List<Criatura> criaturas) {
         System.out.println("Lista de Criaturas Cadastradas:");
-        System.out.println("Nome da Criatura | Elementos | VD");
+        System.out.println("Nome da Criatura | Elementos | VD | DT de Sanidade");
         for (Criatura criatura : criaturas) {
             System.out.print(criatura.getNomeCriatura() + " | ");
             for (String elemento : criatura.getElementosCriatura()) {
                 System.out.print(elemento + ", ");
             }
-            System.out.println(" | " + criatura.getValorDificuldade());
+            System.out.print(" | " + criatura.getValorDificuldade());
+            System.out.println(" | " + criatura.getDtSanidade());
         }
     }
 }
