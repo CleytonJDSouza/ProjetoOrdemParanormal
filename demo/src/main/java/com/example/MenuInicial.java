@@ -15,7 +15,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class MenuInicial {
-    private static List<Criatura> criaturas = new ArrayList<>();
     private static List<Grupo> grupos = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -44,10 +43,10 @@ public class MenuInicial {
                     listarAgentes.listarAgentes();
                     break;
                 case 3:
-                    cadastrarCriatura.cadastrar(scanner, criaturas);
+                    cadastrarCriatura.cadastrar(scanner);
                     break;
                 case 4:
-                    listarCriaturas.listarCriaturas(criaturas);
+                    listarCriaturas.listarCriaturas();
                     break;
                 case 5:
                     criarGrupo(scanner);
@@ -111,6 +110,8 @@ public class MenuInicial {
             System.out.println("Nenhum grupo disponível. Por favor, crie um grupo primeiro.");
             return;
         }
+
+        List<Criatura> criaturas = listarCriaturas.listarCriaturas(); // Lista de criaturas do MongoDB
 
         if (criaturas.isEmpty()) {
             System.out.println("Nenhuma criatura disponível. Por favor, cadastre criaturas primeiro.");

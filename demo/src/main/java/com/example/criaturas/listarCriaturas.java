@@ -1,16 +1,18 @@
 package com.example.criaturas;
 
-import java.util.ArrayList;
+import com.example.database.MongoDBConnector;
+
 import java.util.List;
 
 public class listarCriaturas {
-    private static List<Criatura> criaturas = new ArrayList<>();
+    private static MongoDBConnector dbConnector = new MongoDBConnector();
 
     public static void adicionarCriatura(Criatura criatura) {
-        criaturas.add(criatura);
+        dbConnector.adicionarCriatura(criatura);
     }
 
-    public static void listarCriaturas(List<Criatura> criaturas) {
+    public static List<Criatura> listarCriaturas() {
+        List<Criatura> criaturas = dbConnector.listarCriaturas();
         System.out.println("Lista de Criaturas Cadastradas:");
         System.out.println("Nome da Criatura | Elementos | VD | DT de Sanidade");
         for (Criatura criatura : criaturas) {
@@ -21,5 +23,6 @@ public class listarCriaturas {
             System.out.print(" | " + criatura.getValorDificuldade());
             System.out.println(" | " + criatura.getDtSanidade());
         }
+        return criaturas;
     }
 }

@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class cadastrarCriatura {
-
-    public static void cadastrar(Scanner scanner, List<Criatura> criaturas) {
+    public static void cadastrar(Scanner scanner) {
         String nomeCriatura;
         List<String> elementosCriatura = new ArrayList<>();
         int valorDificuldade;
@@ -26,7 +25,7 @@ public class cadastrarCriatura {
         scanner.nextLine();
 
         Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade, dtSanidade);
-        criaturas.add(novaCriatura);
+        listarCriaturas.adicionarCriatura(novaCriatura); // Salva diretamente no MongoDB
 
         System.out.println("Criatura cadastrada com sucesso!");
     }
