@@ -21,12 +21,9 @@ public class cadastrarCriatura {
         valorDificuldade = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.println("Digite o valor de DT de Sanidade da criatura (0 a 45):");
+        System.out.println("Digite o valor do NEX% imune ao DT de Sanidade da criatura (0 a 100):");
         dtSanidade = scanner.nextInt();
         scanner.nextLine();
-
-        /*Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade, dtSanidade);
-        criaturas.add(novaCriatura);*/
 
         Criatura novaCriatura = new Criatura(nomeCriatura, elementosCriatura, valorDificuldade, dtSanidade);
         criaturas.add(novaCriatura);

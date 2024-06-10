@@ -16,18 +16,25 @@ public class Aventura {
         
         List<Criatura> criaturasDisponiveis = new ArrayList<>(criaturasFiltradas);
 
-        List<Criatura> batalhaFacil = encontrarMelhoresCriaturas(totalNex / 2, criaturasDisponiveis);
+        List<Criatura> batalhaFacil = encontrarMelhoresCriaturas(totalNex, criaturasDisponiveis);
         criaturasDisponiveis.removeAll(batalhaFacil);
 
         List<Criatura> batalhaMedia = encontrarMelhoresCriaturas(totalNex, criaturasDisponiveis);
         criaturasDisponiveis.removeAll(batalhaMedia);
 
-        List<Criatura> batalhaDificil = encontrarCriaturaMaisProxima(3 * totalNex / 2, criaturasDisponiveis);
+        List<Criatura> batalhaDificil = encontrarCriaturaMaisProxima(totalNex, criaturasDisponiveis);
 
         imprimirGrupo(grupo, totalNex);
         imprimirCriaturas("Batalha no Inicio de Aventura", batalhaFacil);
+        atualizarNexGrupo(grupo, batalhaFacil);
+
         imprimirCriaturas("Batalha no Meio da Aventura", batalhaMedia);
+        atualizarNexGrupo(grupo, batalhaMedia);
+
         imprimirCriaturaUnica("Batalha Contra o Boss Final", batalhaDificil);
+        atualizarNexGrupo(grupo, batalhaDificil);
+
+        imprimirResultadosFinais(grupo);
     }
 
     private static int calcularTotalNex(Grupo grupo) {
@@ -39,6 +46,10 @@ public class Aventura {
     }
 
     private static List<Criatura> filtrarCriaturasPorElemento(List<Criatura> criaturas, String elemento) {
+        if (elemento.equalsIgnoreCase("Aleatório")) {
+            return criaturas;
+        }
+
         List <Criatura> criaturaFiltradas = new ArrayList<>();
         for (Criatura criatura : criaturas) {
             if (criatura.getElementosCriatura().contains(elemento)) {
@@ -127,4 +138,33 @@ public class Aventura {
         }
         System.out.println();
     }
+
+    private static void atualizarNexGrupo(Grupo grupo, List<Criatura> criaturas) {
+        for (Agente agente : grupo.getAgentes()) {
+            int nexGanhoTotal = 0;
+            for (Criatura criatura : criaturas) {
+                if (criatura.getDtSanidade() > agente.getExposicaoParanormal()) {
+                    nexGanhoTotal += 1; // Ganho extra se dtSanidade da criatura for maior que o NEX atual
+                }
+            }
+            agente.aumentarExposicaoParanormal(nexGanhoTotal);
+        }
+    }
+    
+
+    private static void imprimirResultadosFinais(Grupo grupo) {
+        System.out.println("Resultados Finais da Aventura:");
+        for (Agente agente : grupo.getAgentes()) {
+            String aviso = agente.deveReceberAviso() ? " | O OUTRO LADO TE CHAMA" : "";
+            System.out.printf("%s | %s | %d%% + %d%% = %d%%%s\n", 
+                              agente.getNomePersonagem(), 
+                              agente.getClassePersonagem(), 
+                              agente.getNexInicial(), 
+                              agente.getExposicaoParanormal() - agente.getNexInicial(), 
+                              agente.getExposicaoParanormal(), 
+                              aviso);
+        }
+    }
+    
+    
 }

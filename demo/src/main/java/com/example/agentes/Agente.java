@@ -7,12 +7,14 @@ public class Agente {
     private String nomePersonagem;
     private String classePersonagem;
     private int exposicaoParanormal;
+    private int nexInicial;
 
     public Agente(String nomeJogador, String nomePersonagem, String classePersonagem, int exposicaoParanormal) {
         this.nomeJogador = nomeJogador;
         this.nomePersonagem = nomePersonagem;
         this.classePersonagem = classePersonagem;
         this.exposicaoParanormal = exposicaoParanormal;
+        this.nexInicial = exposicaoParanormal;
     }
 
     public String getNomeJogador() {
@@ -31,17 +33,23 @@ public class Agente {
         return nomePersonagem;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Agente agente = (Agente) o;
-        return Objects.equals(nomePersonagem, agente.nomePersonagem);
+    public int getNexInicial() {
+        return nexInicial;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(nomePersonagem);
+    public void aumentarExposicaoParanormal(int valor) {
+        this.exposicaoParanormal += valor;
+        if (this.exposicaoParanormal > 99) {
+            this.exposicaoParanormal = 99;
+        }
+    }
+
+    public boolean deveReceberAviso() {
+        for (int i = nexInicial + 1; i <= exposicaoParanormal; i++) {
+            if (i % 5 == 0 && i <= 99) {
+                return true;
+            }
+        }
+        return false;
     }
 }
-

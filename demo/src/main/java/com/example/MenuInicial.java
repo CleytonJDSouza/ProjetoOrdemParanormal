@@ -11,6 +11,7 @@ import com.example.grupo.Grupo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class MenuInicial {
@@ -130,8 +131,20 @@ public class MenuInicial {
         Grupo grupoSelecionado = grupos.get(indiceGrupo);
 
         System.out.println("Escolha o elemento da criatura para a aventura:");
+        System.out.println("1 - Sangue");
+        System.out.println("2 - Morte");
+        System.out.println("3 - Conhecimento");
+        System.out.println("4 - Energia");
+        System.out.println("5 - Medo");
+        System.out.println("6 - Aleatório");
         scanner.nextLine();
         String elementoSelecionado = scanner.nextLine();
+
+        if (elementoSelecionado.equals("6")) {
+            int indexAleatorio = new Random().nextInt(criaturas.size());
+            Criatura criaturaAleatoria = criaturas.get(indexAleatorio);
+            elementoSelecionado = criaturaAleatoria.getElementosCriatura().get(0);
+        }
 
         Aventura.iniciarAventura(grupoSelecionado, criaturas, elementoSelecionado);
     }
