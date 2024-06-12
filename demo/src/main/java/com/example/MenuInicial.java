@@ -70,21 +70,21 @@ public class MenuInicial {
         scanner.nextLine();
         String nomeGrupo = scanner.nextLine();
         Grupo grupo = new Grupo(nomeGrupo);
-
+    
         boolean adicionarMais;
         do {
             listarAgentes.listarAgentes();
             System.out.println("Digite o nome do agente que deseja adicionar ao grupo:");
             String nomeAgente = scanner.nextLine();
             Agente agenteSelecionado = null;
-
+    
             for (Agente agente : listarAgentes.getAgentes()) {
                 if (agente.getNomePersonagem().equalsIgnoreCase(nomeAgente)) {
                     agenteSelecionado = agente;
                     break;
                 }
             }
-
+    
             if (agenteSelecionado != null) {
                 if (grupo.getAgentes().contains(agenteSelecionado)) {
                     System.out.println("Agente já está no grupo.");
@@ -95,12 +95,12 @@ public class MenuInicial {
             } else {
                 System.out.println("Agente não encontrado.");
             }
-
+    
             System.out.println("Deseja adicionar mais um agente ao grupo? (S/N)");
             String resposta = scanner.nextLine();
             adicionarMais = resposta.equalsIgnoreCase("S");
         } while (adicionarMais);
-
+    
         grupos.add(grupo);
         System.out.println("Grupo criado com sucesso.");
     }

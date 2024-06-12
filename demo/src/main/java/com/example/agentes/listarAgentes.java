@@ -1,16 +1,17 @@
 package com.example.agentes;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class listarAgentes {
-    private static List<Agente> agentes = new ArrayList<>();
+import com.example.database.AgenteDAO;
 
+public class listarAgentes {
+    
     public static void adicionarAgente(Agente agente) {
-        agentes.add(agente);
+        AgenteDAO.adicionarAgente(agente);
     }
 
     public static void listarAgentes() {
+        List<Agente> agentes = AgenteDAO.listarAgentes();
         if (agentes.isEmpty()) {
             System.out.println("Nenhum agente cadastrado.");
             return;
@@ -25,6 +26,6 @@ public class listarAgentes {
     }
 
     public static List<Agente> getAgentes() {
-        return agentes;
+        return AgenteDAO.listarAgentes();
     }
 }

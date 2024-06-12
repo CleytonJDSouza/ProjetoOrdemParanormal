@@ -1,4 +1,5 @@
 package com.example.agentes;
+
 import java.util.Scanner;
 
 public class cadastrarAgente {
