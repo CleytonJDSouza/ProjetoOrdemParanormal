@@ -14,6 +14,11 @@ public class Grupo {
         this.agentes = new ArrayList<>();
     }
 
+    public Grupo(String nomeGrupo, List<Agente> agentes) {
+        this.nomeGrupo = nomeGrupo;
+        this.agentes = agentes;
+    }
+
     public String getNomeGrupo() {
         return nomeGrupo;
     }
@@ -29,7 +34,7 @@ public class Grupo {
     public void listarAgentes() {
         System.out.println("Agentes no grupo " + nomeGrupo + ":");
         for (Agente agente : agentes) {
-            System.out.println(agente.getNomePersonagem() + " | " + agente.getClassePersonagem() + " | " + 
+            System.out.println(agente.getNomePersonagem() + " | " + agente.getClassePersonagem() + " | " +
             agente.getExposicaoParanormal() + "% | " + agente.getNomeJogador());
         }
     }

@@ -7,6 +7,7 @@ import com.example.aventura.Aventura;
 import com.example.criaturas.Criatura;
 import com.example.criaturas.cadastrarCriatura;
 import com.example.criaturas.listarCriaturas;
+import com.example.database.GrupoDAO;
 import com.example.grupo.Grupo;
 
 import java.util.ArrayList;
@@ -66,87 +67,131 @@ public class MenuInicial {
     }
 
     private static void criarGrupo(Scanner scanner) {
-        System.out.println("Digite o nome do grupo:");
-        scanner.nextLine();
-        String nomeGrupo = scanner.nextLine();
-        Grupo grupo = new Grupo(nomeGrupo);
-    
-        boolean adicionarMais;
-        do {
-            listarAgentes.listarAgentes();
-            System.out.println("Digite o nome do agente que deseja adicionar ao grupo:");
-            String nomeAgente = scanner.nextLine();
-            Agente agenteSelecionado = null;
-    
-            for (Agente agente : listarAgentes.getAgentes()) {
-                if (agente.getNomePersonagem().equalsIgnoreCase(nomeAgente)) {
-                    agenteSelecionado = agente;
-                    break;
-                }
+    System.out.println("Digite o nome do grupo:");
+    scanner.nextLine(); // Consumir a linha pendente
+    String nomeGrupo = scanner.nextLine();
+    Grupo grupo = new Grupo(nomeGrupo);
+
+    boolean adicionarMais;
+    do {
+        listarAgentes.listarAgentes();
+        System.out.println("Digite o nome do agente que deseja adicionar ao grupo:");
+        String nomeAgente = scanner.nextLine();
+        Agente agenteSelecionado = null;
+
+        for (Agente agente : listarAgentes.getAgentes()) {
+            if (agente.getNomePersonagem().equalsIgnoreCase(nomeAgente)) {
+                agenteSelecionado = agente;
+                break;
             }
-    
-            if (agenteSelecionado != null) {
-                if (grupo.getAgentes().contains(agenteSelecionado)) {
-                    System.out.println("Agente já está no grupo.");
-                } else {
-                    grupo.adicionarAgente(agenteSelecionado);
-                    System.out.println("Agente adicionado ao grupo.");
-                }
+        }
+
+        if (agenteSelecionado != null) {
+            if (grupo.getAgentes().contains(agenteSelecionado)) {
+                System.out.println("Agente já está no grupo.");
             } else {
-                System.out.println("Agente não encontrado.");
+                grupo.adicionarAgente(agenteSelecionado);
+                System.out.println("Agente adicionado ao grupo.");
             }
-    
-            System.out.println("Deseja adicionar mais um agente ao grupo? (S/N)");
-            String resposta = scanner.nextLine();
-            adicionarMais = resposta.equalsIgnoreCase("S");
-        } while (adicionarMais);
-    
-        grupos.add(grupo);
-        System.out.println("Grupo criado com sucesso.");
+        } else {
+            System.out.println("Agente não encontrado.");
+        }
+
+        System.out.println("Deseja adicionar mais um agente ao grupo? (S/N)");
+        String resposta = scanner.nextLine();
+        adicionarMais = resposta.equalsIgnoreCase("S");
+    } while (adicionarMais);
+
+    GrupoDAO.adicionarGrupo(grupo);
+    System.out.println("Grupo criado com sucesso.");
+}
+
+
+private static void iniciarAventura(Scanner scanner) {
+    List<Grupo> grupos = GrupoDAO.listarGrupos();
+    if (grupos.isEmpty()) {
+        System.out.println("Nenhum grupo disponível. Por favor, crie um grupo primeiro.");
+        return;
     }
 
-    private static void iniciarAventura(Scanner scanner) {
-        if (grupos.isEmpty()) {
-            System.out.println("Nenhum grupo disponível. Por favor, crie um grupo primeiro.");
-            return;
+    List<Criatura> criaturas = listarCriaturas.listarCriaturas(); // Lista de criaturas do MongoDB
+
+    if (criaturas.isEmpty()) {
+        System.out.println("Nenhuma criatura disponível. Por favor, cadastre criaturas primeiro.");
+        return;
+    }
+
+    System.out.println("Selecione o grupo para iniciar a aventura:");
+    for (int i = 0; i < grupos.size(); i++) {
+        System.out.println((i + 1) + " - " + grupos.get(i).getNomeGrupo());
+    }
+
+    int indiceGrupo = scanner.nextInt() - 1;
+    if (indiceGrupo < 0 || indiceGrupo >= grupos.size()) {
+        System.out.println("Grupo inválido.");
+        return;
+    }
+
+    Grupo grupoSelecionado = grupos.get(indiceGrupo);
+
+    System.out.println("Escolha o elemento da criatura para a aventura:");
+    System.out.println("1 - Sangue");
+    System.out.println("2 - Morte");
+    System.out.println("3 - Conhecimento");
+    System.out.println("4 - Energia");
+    System.out.println("5 - Medo");
+    System.out.println("6 - Aleatório");
+    int opcaoElemento = scanner.nextInt();
+    scanner.nextLine();
+
+    String elementoSelecionado;
+    switch (opcaoElemento) {
+        case 1:
+            elementoSelecionado = "Sangue";
+            break;
+        case 2:
+            elementoSelecionado = "Morte";
+            break;
+        case 3:
+            elementoSelecionado = "Conhecimento";
+            break;
+        case 4:
+            elementoSelecionado = "Energia";
+            break;
+        case 5:
+            elementoSelecionado = "Medo";
+            break;
+        case 6:
+            String[] elementos = {"Sangue", "Morte", "Conhecimento", "Energia", "Medo"};
+            int indexAleatorio = new Random().nextInt(elementos.length);
+            elementoSelecionado = elementos[indexAleatorio];
+            break;
+        default:
+            System.out.println("Opção inválida. Selecionando elemento aleatório.");
+            String[] elementosPadrao = {"Sangue", "Morte", "Conhecimento", "Energia", "Medo"};
+            int indexPadrao = new Random().nextInt(elementosPadrao.length);
+            elementoSelecionado = elementosPadrao[indexPadrao];
+            break;
+    }
+
+    List<Criatura> criaturasFiltradas = filtrarCriaturasPorElemento(criaturas, elementoSelecionado);
+
+    if (criaturasFiltradas.isEmpty()) {
+        System.out.println("Nenhuma criatura encontrada com o elemento selecionado.");
+        return;
+    }
+
+    Aventura.iniciarAventura(grupoSelecionado, criaturasFiltradas, elementoSelecionado);
+}
+
+    private static List<Criatura> filtrarCriaturasPorElemento(List<Criatura> criaturas, String elemento) {
+        List<Criatura> criaturasFiltradas = new ArrayList<>();
+            for (Criatura criatura : criaturas) {
+            if (criatura.getElementosCriatura().contains(elemento)) {
+            criaturasFiltradas.add(criatura);
+            }
         }
-
-        List<Criatura> criaturas = listarCriaturas.listarCriaturas(); // Lista de criaturas do MongoDB
-
-        if (criaturas.isEmpty()) {
-            System.out.println("Nenhuma criatura disponível. Por favor, cadastre criaturas primeiro.");
-            return;
-        }
-
-        System.out.println("Selecione o grupo para iniciar a aventura:");
-        for (int i = 0; i < grupos.size(); i++) {
-            System.out.println((i + 1) + " - " + grupos.get(i).getNomeGrupo());
-        }
-
-        int indiceGrupo = scanner.nextInt() - 1;
-        if (indiceGrupo < 0 || indiceGrupo >= grupos.size()) {
-            System.out.println("Grupo inválido.");
-            return;
-        }
-
-        Grupo grupoSelecionado = grupos.get(indiceGrupo);
-
-        System.out.println("Escolha o elemento da criatura para a aventura:");
-        System.out.println("1 - Sangue");
-        System.out.println("2 - Morte");
-        System.out.println("3 - Conhecimento");
-        System.out.println("4 - Energia");
-        System.out.println("5 - Medo");
-        System.out.println("6 - Aleatório");
-        scanner.nextLine();
-        String elementoSelecionado = scanner.nextLine();
-
-        if (elementoSelecionado.equals("6")) {
-            int indexAleatorio = new Random().nextInt(criaturas.size());
-            Criatura criaturaAleatoria = criaturas.get(indexAleatorio);
-            elementoSelecionado = criaturaAleatoria.getElementosCriatura().get(0);
-        }
-
-        Aventura.iniciarAventura(grupoSelecionado, criaturas, elementoSelecionado);
+        return criaturasFiltradas;
     }
 }
+
